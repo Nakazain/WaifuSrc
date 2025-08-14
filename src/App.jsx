@@ -22,11 +22,11 @@ export default function App() {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-4xl font-bold">Wife Search</p>
         <div className="flex items-center">
-          <p>NSFW</p>
+          <p>NSFW (18+)</p>
           <Toggle />
         </div>
         <Tags />
-        <Card url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} />
+        <Card url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} h={data.height} w={data.width} />
         </div>
       </>
       )
