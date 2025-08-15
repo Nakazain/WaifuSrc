@@ -21,7 +21,7 @@ export default function App() {
     <>
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-4xl font-bold mt-8">Wife Search</p>
-        <div className="grid grid-cols-2 items-start justify-center w-full max-w-2xl p-4 mt-8">
+        <div className="grid grid-cols-2 border items-center justify-center w-full max-w-2xl p-4 mt-8 mb-6">
           <div className="flex items-center">
             <p>NSFW (18+)</p>
             <Toggle />
@@ -38,6 +38,7 @@ export default function App() {
             <p className="mr-4">Tags 2</p>
             <Tags />
           </div>
+          <button className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4">Search</button> 
         </div>
         <Content url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} h={data.height} w={data.width} />
       </div>
