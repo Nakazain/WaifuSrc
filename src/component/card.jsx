@@ -23,11 +23,12 @@ export default function Card({ url, art, source, tag, desc, nsfw, w, h }) {
     <div className="flex justify-center w-fit gap-6 p-4">
       <img src={url} alt="Waifu" className="h-full w-64 object-cover rounded-lg mb-4" />
       <div>
-      <h2 className="text-4xl font-bold mb-4">Artist: {art?.name}</h2>
+      { art?.name ? <h2 className="text-4xl font-bold mb-4">Artist: {art.name}</h2> : null }
       <div className="mb-2 p-2 border rounded-lg ">
-      <p className="text-gray-400 mb-2">Twitter/X: {art?.twitter}</p>
-      <p className="text-gray-400 mb-2">Pixiv: {art?.pixiv}</p>
-      <p className="text-gray-400 mb-2">Source: {source}</p>
+      { art?.twitter ? <p className="text-gray-400 mb-2">Twitter/X: {art.twitter}</p> : null }
+      { art?.pixiv ? <p className="text-gray-400 mb-2">Pixiv: {art.pixiv}</p> : null}
+      { art?.deviant_art ? <p className="text-gray-400 mb-2">Deviant Art: {art?.deviant_art}</p> : null }
+      <p className="text-gray-400">Source: {source}</p>
       </div>
       <p className="text-gray-400 mb-2">NSFW: {nsfw ? "Yes" : "No"}</p>
       <p className="text-gray-400 mb-2">Tags: {tag}</p>
