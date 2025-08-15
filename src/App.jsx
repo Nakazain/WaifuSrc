@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Tags from './component/tags'
 import Toggle from './component/toggle'
-import Card from './component/card';
+import Content from './component/content';
 
 export default function App() {
   const [data, setData] = useState("");
@@ -26,7 +26,7 @@ export default function App() {
           <Toggle />
         </div>
         <Tags />
-        <Card url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} h={data.height} w={data.width} />
+        <Content url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} h={data.height} w={data.width} />
         </div>
       </>
       )
