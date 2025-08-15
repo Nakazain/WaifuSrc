@@ -6,15 +6,21 @@ import Content from './component/content';
 export default function App() {
   const [data, setData] = useState("");
 
+  function fetchApi() {
+    setTimeout(() => {
+      fetch("https://api.waifu.im/search")
+        .then(res => res.json())
+        .then(data => {
+          if (data.images && data.images.length > 0) {
+            setData(data.images[0]);
+          }
+        })
+        .catch(err => console.error(err));
+    }, 1000);
+  }
+
   useEffect(() => {
-    fetch("https://api.waifu.im/search")
-      .then(res => res.json())
-      .then(data => {
-        if (data.images && data.images.length > 0) {
-          setData(data.images[0]);
-        }
-      })
-      .catch(err => console.error(err));
+    fetchApi();
   }, []);
 
   return (
@@ -38,7 +44,8 @@ export default function App() {
             <p className="mr-4">Tags 2</p>
             <Tags />
           </div>
-          <button className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4">Search</button> 
+          <button className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4">Search</button>
+          <button onClick={fetchApi} className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4">Randomize</button>
         </div>
         <Content url={data.url} art={data.artist} source={data.source} tag={data.tags?.[0]?.name} desc={data.tags?.[0]?.description} nsfw={data.is_nsfw} h={data.height} w={data.width} />
       </div>
