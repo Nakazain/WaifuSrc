@@ -4,47 +4,61 @@ import Toggle from "./component/toggle";
 import Content from "./component/content";
 
 export default function App() {
-  const [data, setData] = useState(null);
-  const [nsfw, setNsfw] = useState(false);
-  const [gif, setGif] = useState(false);
-  const [tag1, setTag1] = useState("");
-  const [tag2, setTag2] = useState("");
+const [data, setData] = useState(null);
+const [nsfw, setNsfw] = useState(false);
+const [gif, setGif] = useState(false);
+const [tag1, setTag1] = useState("");
+const [tag2, setTag2] = useState("");
+const [error, setError] = useState(null);
 
-  const timeoutRef = useRef(null);
+const timeoutRef = useRef(null);
 
-  function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
+  if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    const doFetch = () => {
-      const params = new URLSearchParams({
-        is_nsfw: nsfw,
-        gif: gif,
-        ...(tag1 && { included_tags: tag1 }),
-        ...(tag2 && { included_tags: tag2 }),
-        ...customParams,
+  const doFetch = () => {
+    setError(null); 
+    setData(null); 
+
+    const params = new URLSearchParams({
+      is_nsfw: nsfw,
+      gif: gif,
+      ...(tag1 && { included_tags: tag1 }),
+      ...(tag2 && { included_tags: tag2 }),
+      ...customParams,
+    });
+
+    fetch(`https://api.waifu.im/search?${params.toString()}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.detail || `Error ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.images && data.images.length > 0) {
+          setData(data.images[0]);
+        } else {
+          setError("No images found for this search.");
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
       });
+  };
 
-      fetch(`https://api.waifu.im/search?${params.toString()}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.images && data.images.length > 0) {
-            setData(data.images[0]);
-          }
-        })
-        .catch((err) => console.error(err));
-    };
-
-    if (skipDebounce) {
-      doFetch();
-    } else {
-      timeoutRef.current = setTimeout(doFetch, 1000);
-    }
+  if (skipDebounce) {
+    doFetch();
+  } else {
+    timeoutRef.current = setTimeout(doFetch, 1000);
   }
+}
 
-  useEffect(() => {
-    fetchApi({ skipDebounce: true });
-    return () => clearTimeout(timeoutRef.current);
-  }, []);
+useEffect(() => {
+  fetchApi({ skipDebounce: true });
+  return () => clearTimeout(timeoutRef.current);
+}, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -84,6 +98,7 @@ export default function App() {
         >
           Randomize
         </button>
+        {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
       </div>
 
       {data ? (
