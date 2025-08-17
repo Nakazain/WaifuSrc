@@ -1,20 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function tags({ value, onChange, nsfw }) {
-
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
     fetch("https://api.waifu.im/tags")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         let filtered = data.versatile;
         if (nsfw) {
           filtered = [...filtered, ...data.nsfw];
         }
         setTags(filtered);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, [nsfw]);
 
   return (
@@ -22,21 +21,32 @@ export default function tags({ value, onChange, nsfw }) {
       <div className="absolute -z-10 -inset-1 rounded-xl bg-gradient-to-r from-teal-500 via-gold to-green-500 opacity-10 blur-sm transition-all duration-500 group-hover:opacity-30 group-hover:blur-2xl" />
       <form className="flex bg-gray-900 border border-gray-700 text-white rounded-md shadow text-sm">
         <div aria-disabled="true" className="w-10 grid place-content-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={16}
+            height={16}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <circle cx={11} cy={11} r={8} />
             <path d="m21 21-4.3-4.3" />
           </svg>
         </div>
         <select
           value={value}
-          onChange={e => onChange(e.target.value)}
-          className="col-start-1 row-start-1 w-48 appearance-none rounded-md bg-gray-900 py-1.5 pr-7 pl-3 text-base text-gray-400 *:bg-gray-800 placeholder:text-gray-500 focus:outline-none">
-            <option value="">-- None --</option>
-            {tags.map(tag => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
+          onChange={(e) => onChange(e.target.value)}
+          className="col-start-1 row-start-1 w-48 appearance-none rounded-md bg-gray-900 py-1.5 pr-7 pl-3 text-base text-gray-400 *:bg-gray-800 placeholder:text-gray-500 focus:outline-none"
+        >
+          <option value="">-- None --</option>
+          {tags.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
         </select>
       </form>
       <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
