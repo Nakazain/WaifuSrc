@@ -4,61 +4,63 @@ import Toggle from "./component/toggle";
 import Content from "./component/content";
 
 export default function App() {
-const [data, setData] = useState(null);
-const [nsfw, setNsfw] = useState(false);
-const [gif, setGif] = useState(false);
-const [tag1, setTag1] = useState("");
-const [tag2, setTag2] = useState("");
-const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+  const [nsfw, setNsfw] = useState(false);
+  const [gif, setGif] = useState(false);
+  const [tag1, setTag1] = useState("");
+  const [tag2, setTag2] = useState("");
+  const [error, setError] = useState(null);
 
-const timeoutRef = useRef(null);
+  const timeoutRef = useRef(null);
 
-function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
-  if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-  const doFetch = () => {
-    setError(null); 
-    setData(null); 
+    const doFetch = () => {
+      setError(null);
+      setData(null);
 
-    const params = new URLSearchParams({
-      is_nsfw: nsfw,
-      gif: gif,
-      ...(tag1 && { included_tags: tag1 }),
-      ...(tag2 && { included_tags: tag2 }),
-      ...customParams,
-    });
-
-    fetch(`https://api.waifu.im/search?${params.toString()}`)
-      .then(async (res) => {
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData?.detail || `Error ${res.status}: ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data.images && data.images.length > 0) {
-          setData(data.images[0]);
-        } else {
-          setError("No images found for this search.");
-        }
-      })
-      .catch((err) => {
-        setError(err.message);
+      const params = new URLSearchParams({
+        is_nsfw: nsfw,
+        gif: gif,
+        ...(tag1 && { included_tags: tag1 }),
+        ...(tag2 && { included_tags: tag2 }),
+        ...customParams,
       });
-  };
 
-  if (skipDebounce) {
-    doFetch();
-  } else {
-    timeoutRef.current = setTimeout(doFetch, 1000);
+      fetch(`https://api.waifu.im/search?${params.toString()}`)
+        .then(async (res) => {
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(
+              errData?.detail || `Error ${res.status}: ${res.statusText}`
+            );
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data.images && data.images.length > 0) {
+            setData(data.images[0]);
+          } else {
+            setError("No images found for this search.");
+          }
+        })
+        .catch((err) => {
+          setError(err.message);
+        });
+    };
+
+    if (skipDebounce) {
+      doFetch();
+    } else {
+      timeoutRef.current = setTimeout(doFetch, 1000);
+    }
   }
-}
 
-useEffect(() => {
-  fetchApi({ skipDebounce: true });
-  return () => clearTimeout(timeoutRef.current);
-}, []);
+  useEffect(() => {
+    fetchApi({ skipDebounce: true });
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -88,15 +90,17 @@ useEffect(() => {
         <button
           onClick={() => fetchApi({ skipDebounce: true })}
           className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
+          disabled={!data}
         >
-          Search
+          {data ? "Search" : "Loading..."}
         </button>
 
         <button
           onClick={() => fetchApi()}
           className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
+          disabled={!data}
         >
-          Randomize
+          {data ? "Random" : "Loading..."}
         </button>
         {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
       </div>
