@@ -90,17 +90,15 @@ export default function App() {
         <button
           onClick={() => fetchApi({ skipDebounce: true })}
           className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
-          disabled={!data}
         >
-          {data ? "Search" : "Loading..."}
+          Search
         </button>
 
         <button
           onClick={() => fetchApi()}
           className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
-          disabled={!data}
         >
-          {data ? "Random" : "Loading..."}
+          Randomize
         </button>
         {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
       </div>
