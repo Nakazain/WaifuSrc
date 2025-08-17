@@ -1,7 +1,7 @@
-export default function toggle() {
+export default function toggle({ checked, onChange }) {
   return (
     <label className="switch cursor-pointer relative flex w-[6.7rem] scale-75 overflow-hidden p-2">
-      <input type="checkbox" className="peer hidden" />
+      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} className="peer hidden" />
       <div className="absolute -right-[6.5rem] z-[1] flex h-12 w-24 skew-x-12 items-center justify-center text-lg duration-500 peer-checked:right-1">
         <span className="-skew-x-12">YES</span>
       </div>
