@@ -16,7 +16,6 @@ export default function App() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     const doFetch = () => {
-      // build query
       const params = new URLSearchParams({
         is_nsfw: nsfw,
         gif: gif,
@@ -42,7 +41,6 @@ export default function App() {
     }
   }
 
-  // Initial fetch
   useEffect(() => {
     fetchApi({ skipDebounce: true });
     return () => clearTimeout(timeoutRef.current);

@@ -8,7 +8,6 @@ export default function tags({ value, onChange, nsfw }) {
     fetch("https://api.waifu.im/tags")
       .then(res => res.json())
       .then(data => {
-        // filter berdasarkan nsfw
         let filtered = data.versatile;
         if (nsfw) {
           filtered = [...filtered, ...data.nsfw];
