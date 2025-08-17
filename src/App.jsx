@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
-import Tags from './component/tags'
-import Toggle from './component/toggle'
-import Content from './component/content';
+import { useState, useEffect, useRef } from "react";
+import Tags from "./component/tags";
+import Toggle from "./component/toggle";
+import Content from "./component/content";
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -21,17 +21,17 @@ export default function App() {
         gif: gif,
         ...(tag1 && { included_tags: tag1 }),
         ...(tag2 && { included_tags: tag2 }),
-        ...customParams
+        ...customParams,
       });
 
       fetch(`https://api.waifu.im/search?${params.toString()}`)
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.images && data.images.length > 0) {
             setData(data.images[0]);
           }
         })
-        .catch(err => console.error(err));
+        .catch((err) => console.error(err));
     };
 
     if (skipDebounce) {
