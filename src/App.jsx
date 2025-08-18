@@ -10,16 +10,12 @@ export default function App() {
   const [tag1, setTag1] = useState("");
   const [tag2, setTag2] = useState("");
   const [error, setError] = useState(null);
-
   const timeoutRef = useRef(null);
 
   function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     const doFetch = () => {
-      setError(null);
-      setData(null);
-
       const params = new URLSearchParams({
         is_nsfw: nsfw,
         gif: gif,
@@ -29,25 +25,16 @@ export default function App() {
       });
 
       fetch(`https://api.waifu.im/search?${params.toString()}`)
-        .then(async (res) => {
-          if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(
-              errData?.detail || `Error ${res.status}: ${res.statusText}`
-            );
-          }
-          return res.json();
-        })
+        .then((res) => res.json())
         .then((data) => {
           if (data.images && data.images.length > 0) {
             setData(data.images[0]);
+            setError(null); // clear error
           } else {
-            setError("No images found for this search.");
+            setError(data.detail || "Tidak ada hasil ditemukan.");
           }
         })
-        .catch((err) => {
-          setError(err.message);
-        });
+        .catch(() => setError("Terjadi kesalahan saat mengambil data"));
     };
 
     if (skipDebounce) {
@@ -56,6 +43,16 @@ export default function App() {
       timeoutRef.current = setTimeout(doFetch, 1000);
     }
   }
+
+  const handleSearch = () => {
+    fetchApi({ skipDebounce: true });
+  };
+
+  const handleRandomize = () => {
+    setTag1("");
+    setTag2("");
+    fetchApi({ skipDebounce: true });
+  };
 
   useEffect(() => {
     fetchApi({ skipDebounce: true });
@@ -88,14 +85,14 @@ export default function App() {
         </div>
 
         <button
-          onClick={() => fetchApi({ skipDebounce: true })}
+          onClick={handleSearch}
           className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
         >
           Search
         </button>
 
         <button
-          onClick={() => fetchApi()}
+          onClick={handleRandomize}
           className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
         >
           Randomize
