@@ -68,10 +68,10 @@ export default function App() {
   return (
     <>
       <div className="flex justify-center">
-        <div className="flex flex-col items-center max-w-5xl justify-center min-h-screen">
+        <div className="flex flex-col items-center lg:max-w-5xl justify-center min-h-screen">
           <p className="text-4xl font-bold mt-8">Waifu Search</p>
 
-          <div className="grid grid-cols-2 border items-center justify-center w-full max-w-2xl p-4 mt-8 mb-6">
+          <div className="lg:grid grid-cols-2 border items-center justify-center w-full max-w-2xl p-4 mt-8 mb-6">
             <div className="flex items-center">
               <p>NSFW (18+)</p>
               <Toggle checked={nsfw} onChange={setNsfw} />
