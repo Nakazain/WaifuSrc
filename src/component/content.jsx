@@ -70,17 +70,15 @@ export default function Content({ url, art, source, tag, desc, nsfw, w, h }) {
         ) : null}
         <div className="mb-2 p-2 border rounded-lg ">
           {art?.twitter ? (
-            <p className="text-gray-400 mb-2">Twitter/X: {art.twitter}</p>
+            <p className="text-gray-400 mb-2">Twitter/X: <a href={art.twitter} target="_blank" rel="noopener noreferrer" className="underline cursor-pointer">{art.twitter}</a></p>
           ) : null}
           {art?.pixiv ? (
-            <p className="text-gray-400 mb-2">Pixiv: {art.pixiv}</p>
+            <p className="text-gray-400 mb-2">Pixiv: <a href={art.pixiv} target="_blank" rel="noopener noreferrer" className="underline cursor-pointer">{art.pixiv}</a></p>
           ) : null}
           {art?.deviant_art ? (
-            <p className="text-gray-400 mb-2">
-              Deviant Art: {art?.deviant_art}
-            </p>
+            <p className="text-gray-400 mb-2">Deviant Art: <a href={art.deviant_art} target="_blank" rel="noopener noreferrer" className="underline cursor-pointer">{art.deviant_art}</a></p>
           ) : null}
-          <p className="text-gray-400">Source: {source}</p>
+          <p className="text-gray-400">Source: <a href={source} target="_blank" rel="noopener noreferrer" className="underline cursor-pointer">{source}</a></p>
         </div>
         <p className="text-gray-400 mb-2">NSFW: {nsfw ? "Yes" : "No"}</p>
         <p className="text-gray-400 mb-2">Tags: {tag}</p>
