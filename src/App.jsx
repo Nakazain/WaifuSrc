@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Tags from "./component/tags";
 import Toggle from "./component/toggle";
 import Content from "./component/content";
+import Footer from "./component/footer";
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -65,60 +66,65 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <p className="text-4xl font-bold mt-8">Waifu Search</p>
+    <>
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center max-w-5xl justify-center min-h-screen">
+          <p className="text-4xl font-bold mt-8">Waifu Search</p>
 
-      <div className="grid grid-cols-2 border items-center justify-center w-full max-w-2xl p-4 mt-8 mb-6">
-        <div className="flex items-center">
-          <p>NSFW (18+)</p>
-          <Toggle checked={nsfw} onChange={setNsfw} />
+          <div className="grid grid-cols-2 border items-center justify-center w-full max-w-2xl p-4 mt-8 mb-6">
+            <div className="flex items-center">
+              <p>NSFW (18+)</p>
+              <Toggle checked={nsfw} onChange={setNsfw} />
+            </div>
+
+            <div className="flex items-center">
+              <p className="mr-4">Tags 1</p>
+              <Tags value={tag1} onChange={setTag1} nsfw={nsfw} />
+            </div>
+
+            <div className="flex items-center">
+              <p>GIF</p>
+              <Toggle checked={gif} onChange={setGif} />
+            </div>
+
+            <div className="flex items-center">
+              <p className="mr-4">Tags 2</p>
+              <Tags value={tag2} onChange={setTag2} nsfw={nsfw} />
+            </div>
+
+            <button
+              onClick={handleSearch}
+              className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
+            >
+              Search
+            </button>
+
+            <button
+              onClick={handleRandomize}
+              className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
+            >
+              Randomize
+            </button>
+            {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
+          </div>
+
+          {data ? (
+            <Content
+              url={data.url}
+              art={data.artist}
+              source={data.source}
+              tag={data.tags?.[0]?.name}
+              desc={data.tags?.[0]?.description}
+              nsfw={data.is_nsfw}
+              h={data.height}
+              w={data.width}
+            />
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
-
-        <div className="flex items-center">
-          <p className="mr-4">Tags 1</p>
-          <Tags value={tag1} onChange={setTag1} nsfw={nsfw} />
-        </div>
-
-        <div className="flex items-center">
-          <p>GIF</p>
-          <Toggle checked={gif} onChange={setGif} />
-        </div>
-
-        <div className="flex items-center">
-          <p className="mr-4">Tags 2</p>
-          <Tags value={tag2} onChange={setTag2} nsfw={nsfw} />
-        </div>
-
-        <button
-          onClick={handleSearch}
-          className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
-        >
-          Search
-        </button>
-
-        <button
-          onClick={handleRandomize}
-          className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
-        >
-          Randomize
-        </button>
-        {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
       </div>
-
-      {data ? (
-        <Content
-          url={data.url}
-          art={data.artist}
-          source={data.source}
-          tag={data.tags?.[0]?.name}
-          desc={data.tags?.[0]?.description}
-          nsfw={data.is_nsfw}
-          h={data.height}
-          w={data.width}
-        />
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+      <Footer />
+    </>
   );
 }
