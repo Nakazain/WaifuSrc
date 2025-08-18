@@ -13,7 +13,7 @@ export default function App() {
 
   const timeoutRef = useRef(null);
 
-  function fetchApi(customParams = {}) {
+  function fetchApi(ignoreTags = false, customParams = {}) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     timeoutRef.current = setTimeout(() => {
@@ -23,8 +23,8 @@ export default function App() {
       const params = new URLSearchParams({
         is_nsfw: nsfw,
         gif: gif,
-        ...(tag1 && { included_tags: tag1 }),
-        ...(tag2 && { included_tags: tag2 }),
+        ...(!ignoreTags && tag1 ? { included_tags: tag1 } : {}),
+        ...(!ignoreTags && tag2 ? { included_tags: tag2 } : {}),
         ...customParams,
       });
 
@@ -61,7 +61,7 @@ export default function App() {
   };
 
   const handleRandomize = () => {
-    fetchApi({ included_tags: "" });
+    fetchApi({ ignoreTags: true });
   };
 
   return (
