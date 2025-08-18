@@ -1,9 +1,6 @@
-import express from "express";
 import fetch from "node-fetch";
 
-const app = express();
-
-app.get("/download", async (req, res) => {
+export default async function handler(req, res) {
   const imageUrl = req.query.url;
 
   try {
@@ -29,4 +26,4 @@ app.get("/download", async (req, res) => {
   } catch (err) {
     res.status(500).send("Terjadi kesalahan saat mendownload");
   }
-});
+}
