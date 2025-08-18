@@ -30,5 +30,3 @@ app.get("/download", async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat mendownload");
   }
 });
-
-app.listen(4000, () => console.log("Server berjalan di port 4000"));
