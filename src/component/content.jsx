@@ -11,7 +11,7 @@ export default function Content({ url, art, source, tag, desc, nsfw, w, h }) {
 
   return (
     <div className="flex justify-center w-fit rounded-lg gap-6 p-4">
-      <div className="overflow-hidden relative w-64">
+      <div className="overflow-hidden flex-1 relative w-64">
         {loading && (
           <div className="absolute flex items-center justify-center bg-black w-64 h-full opacity-90">
             <svg
