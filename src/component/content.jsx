@@ -88,7 +88,7 @@ export default function Content({ url, art, source, tag, desc, nsfw, w, h }) {
         <p className="text-gray-400">
           Resulution: {h} px x {w} px
         </p>
-        <button onClick={() => {window.location.href = `http://localhost:4000/download?url=${encodeURIComponent(url)}`}} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        <button onClick={() => {window.location.href = `https://waifu-src.vercel.app//download?url=${encodeURIComponent(url)}`}} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
           Download
         </button>
       </div>
