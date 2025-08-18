@@ -10,12 +10,16 @@ export default function App() {
   const [tag1, setTag1] = useState("");
   const [tag2, setTag2] = useState("");
   const [error, setError] = useState(null);
+
   const timeoutRef = useRef(null);
 
-  function fetchApi({ skipDebounce = false, customParams = {} } = {}) {
+  function fetchApi(customParams = {}) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    const doFetch = () => {
+    timeoutRef.current = setTimeout(() => {
+      setError(null);
+      setData(null);
+
       const params = new URLSearchParams({
         is_nsfw: nsfw,
         gif: gif,
@@ -25,39 +29,40 @@ export default function App() {
       });
 
       fetch(`https://api.waifu.im/search?${params.toString()}`)
-        .then((res) => res.json())
+        .then(async (res) => {
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(
+              errData?.detail || `Error ${res.status}: ${res.statusText}`
+            );
+          }
+          return res.json();
+        })
         .then((data) => {
           if (data.images && data.images.length > 0) {
             setData(data.images[0]);
-            setError(null); // clear error
           } else {
-            setError(data.detail || "Tidak ada hasil ditemukan.");
+            setError("No images found for this search.");
           }
         })
-        .catch(() => setError("Terjadi kesalahan saat mengambil data"));
-    };
-
-    if (skipDebounce) {
-      doFetch();
-    } else {
-      timeoutRef.current = setTimeout(doFetch, 1000);
-    }
+        .catch((err) => {
+          setError(err.message);
+        });
+    }, 1000);
   }
 
+  useEffect(() => {
+    fetchApi();
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
   const handleSearch = () => {
-    fetchApi({ skipDebounce: true });
+    fetchApi();
   };
 
   const handleRandomize = () => {
-    setTag1("");
-    setTag2("");
-    fetchApi({ skipDebounce: true });
+    fetchApi({ included_tags: "" });
   };
-
-  useEffect(() => {
-    fetchApi({ skipDebounce: true });
-    return () => clearTimeout(timeoutRef.current);
-  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
