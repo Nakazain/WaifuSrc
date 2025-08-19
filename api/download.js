@@ -2,14 +2,14 @@ export default async function handler(req, res) {
   const imageUrl = req.query.url;
 
   if (!imageUrl) {
-    return res.status(400).send("URL gambar diperlukan");
+    return res.status(400).send("URL parameter is required");
   }
 
   try {
     const response = await fetch(imageUrl);
 
     if (!response.ok) {
-      return res.status(400).send("Gagal mengambil gambar");
+      return res.status(400).send("Failed to take image from URL");
     }
 
     const contentType = response.headers.get("content-type") || "application/octet-stream";
@@ -27,6 +27,6 @@ export default async function handler(req, res) {
 
   } catch (err) {
     console.error("Error download:", err);
-    res.status(500).send("Terjadi kesalahan saat mendownload");
+    res.status(500).send("An error occurred while downloading the image");
   }
 }
