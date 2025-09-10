@@ -91,20 +91,21 @@ export default function App() {
               <p className="mr-4">Tags 2</p>
               <Tags value={tag2} onChange={setTag2} nsfw={nsfw} />
             </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleSearch}
+                className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
+              >
+                Search
+              </button>
 
-            <button
-              onClick={handleSearch}
-              className="col-span-2 bg-green-500 text-white rounded-lg hover:bg-green-600 px-4 py-2 mt-4"
-            >
-              Search
-            </button>
-
-            <button
-              onClick={handleRandomize}
-              className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
-            >
-              Randomize
-            </button>
+              <button
+                onClick={handleRandomize}
+                className="col-span-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 px-4 py-2 mt-4"
+              >
+                Randomize
+              </button>
+            </div>
             {error && <p className="col-span-2 text-red-500 mt-4">{error}</p>}
           </div>
 
